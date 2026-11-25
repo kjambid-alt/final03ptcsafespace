@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PTC SafeSpace Portal | Incident Reporting & Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            ptc: {
+              dark: '#0f5132',
+              primary: '#198754',
+              hover: '#146c43',
+              light: '#d1e7dd',
+              bg: '#f4f9f6',
+              accent: '#20c997'
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="min-h-screen flex flex-col ptc-pattern selection:bg-ptc-light selection:text-ptc-dark">
+
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <header class="bg-ptc-dark text-white shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <button type="button" onclick="handleBrandClick()" class="flex items-center gap-3 text-left focus:outline-none group">
+        <div class="w-10 h-10 rounded-xl bg-ptc-primary flex items-center justify-center shadow-inner group-hover:bg-emerald-500 transition">
+          <img src="images/logopic.png" alt="PTC SafeSpace Logo" class="w-5 h-5" />
+        </div>
+        <div>
+          <span class="font-bold text-lg tracking-tight block leading-none">PTC SafeSpace Portal</span>
+          <span class="text-xs text-ptc-light/90 font-medium tracking-wide">Incident Reporting & Management System</span>
+        </div>
+      </button>
+      <div id="nav-actions" class="flex items-center gap-3"></div>
+    </div>
+  </header>
+
+  <main class="flex-grow flex flex-col">
+    <!-- 1. LANDING SCREEN -->
+    <section id="view-landing" class="flex-grow flex items-center justify-center px-4 py-12 fade-in">
+      <div class="max-w-4xl w-full">
+        <div class="bg-white rounded-3xl shadow-xl border border-emerald-100 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+          <div class="lg:col-span-5 bg-gradient-to-br from-ptc-dark via-ptc-primary to-emerald-700 text-white p-8 sm:p-10 flex flex-col justify-between">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold tracking-wide mb-6">
+                <i class="fa-solid fa-building-columns"></i>
+                <span>Pateros Technological College</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight mb-4">Safe, Confidential Campus Reporting & Support</h1>
+              <p class="text-emerald-50 text-sm leading-relaxed mb-6">
+                Welcome to the official PTC SafeSpace Portal. Submit incident reports securely, attach supporting evidence, track real-time case progress, and connect directly with Student Services and Guidance Counselors.
+              </p>
+            </div>
+            <div class="space-y-3 pt-6 border-t border-white/20 text-xs text-emerald-100">
+              <div class="flex items-center gap-2.5"><i class="fa-solid fa-lock text-emerald-300"></i><span>Verified Student & Personnel Access</span></div>
+              <div class="flex items-center gap-2.5"><i class="fa-solid fa-file-shield text-emerald-300"></i><span>Direct Guidance & Student Council Case Handling</span></div>
+              <div class="flex items-center gap-2.5"><i class="fa-solid fa-heart-pulse text-emerald-300"></i><span>24/7 Wellness & Safety Resource Directory</span></div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center">
+            <span class="text-xs font-bold uppercase tracking-wider text-ptc-primary mb-2">Portal Access</span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">Do you already have an account?</h2>
+            <p class="text-slate-600 text-sm mb-8 leading-relaxed">
+              To maintain campus safety and verify report authenticity, all students and Student Services personnel must sign in with a registered PTC SafeSpace account.
+            </p>
+            <div class="space-y-4">
+              <button type="button" onclick="navigateTo('login')" class="w-full group flex items-center justify-between p-5 rounded-2xl border-2 border-ptc-primary bg-ptc-primary text-white hover:bg-ptc-hover hover:border-ptc-hover transition shadow-md cursor-pointer text-left">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center text-xl"><i class="fa-solid fa-right-to-bracket"></i></div>
+                  <div>
+                    <div class="font-bold text-base sm:text-lg">Yes, Log In to my Account</div>
+                    <div class="text-xs text-emerald-100">Access Student Portal or Student Services Dashboard</div>
+                  </div>
+                </div>
+                <i class="fa-solid fa-arrow-right text-lg group-hover:translate-x-1 transition-transform"></i>
+              </button>
+
+              <button type="button" onclick="navigateTo('register')" class="w-full group flex items-center justify-between p-5 rounded-2xl border-2 border-emerald-200 bg-ptc-bg/60 text-slate-800 hover:border-ptc-primary hover:bg-ptc-light/40 transition cursor-pointer text-left">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-ptc-light text-ptc-dark flex items-center justify-center text-xl"><i class="fa-solid fa-user-plus"></i></div>
+                  <div>
+                    <div class="font-bold text-base sm:text-lg text-ptc-dark">No, I need to Register first</div>
+                    <div class="text-xs text-slate-600">Create a verified Student or Student Services account</div>
+                  </div>
+                </div>
+                <i class="fa-solid fa-arrow-right text-lg text-ptc-primary group-hover:translate-x-1 transition-transform"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. REGISTRATION SCREEN -->
+    <section id="view-register" class="hidden flex-grow flex items-center justify-center px-4 py-10 fade-in">
+      <div class="max-w-2xl w-full bg-white rounded-3xl shadow-xl border border-emerald-100 p-6 sm:p-10">
+        <div class="flex items-center justify-between mb-6">
+          <button type="button" onclick="navigateTo('landing')" class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-ptc-dark transition">
+            <i class="fa-solid fa-arrow-left"></i> Back to Welcome
+          </button>
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-ptc-light text-ptc-dark">New Account Registration</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900 mb-1">Create Your SafeSpace Account</h2>
+        <p class="text-sm text-slate-600 mb-6">Select your account type below and complete all required verification fields.</p>
+
+        <div class="grid grid-cols-2 gap-2 p-1.5 bg-ptc-bg rounded-2xl border border-emerald-100 mb-6">
+          <button type="button" id="reg-tab-student" onclick="switchRegisterRole('student')" class="py-2.5 px-4 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 bg-ptc-primary text-white shadow-sm">
+            <i class="fa-solid fa-user-graduate"></i> Student Registration
+          </button>
+          <button type="button" id="reg-tab-services" onclick="switchRegisterRole('services')" class="py-2.5 px-4 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 text-slate-600 hover:text-ptc-dark">
+            <i class="fa-solid fa-user-tie"></i> Student Services
+          </button>
+        </div>
+
+        <form id="form-register-student" onsubmit="handleStudentRegister(event)" class="space-y-4" novalidate>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="reg-stu-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Full Name *</label>
+              <input type="text" id="reg-stu-name" placeholder="e.g., Juan Dela Cruz" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+            </div>
+            <div>
+              <label for="reg-stu-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Student ID Number *</label>
+              <input type="text" id="reg-stu-id" placeholder="e.g., 26BSIT-1234" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm uppercase" />
+              <p class="text-[11px] text-slate-500 mt-1">Format: <code>YYCOURSE-XXXX</code> (e.g., 26BSIT-1234)</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="reg-stu-email" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">PTC Email Address *</label>
+              <input type="email" id="reg-stu-email" placeholder="name@paterostechnologicalcollege.edu.ph" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+            </div>
+            <div>
+              <label for="reg-stu-password" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Create Password *</label>
+              <input type="password" id="reg-stu-password" placeholder="Minimum 6 characters" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+            </div>
+          </div>
+
+          <div class="pt-1">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Student Verification Document (School ID or COR) *</label>
+            <div class="upload-zone border-2 border-dashed border-emerald-300 rounded-2xl p-5 text-center bg-ptc-bg/50 transition cursor-pointer relative">
+              <input type="file" id="reg-stu-doc" accept="image/*,.pdf" onchange="handleRegDocSelect(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required />
+              <div id="reg-stu-doc-placeholder">
+                <div class="w-11 h-11 rounded-full bg-ptc-light text-ptc-dark flex items-center justify-center mx-auto mb-2 text-lg"><i class="fa-solid fa-id-card"></i></div>
+                <p class="text-sm font-semibold text-slate-800">Click or drag to upload School ID or COR</p>
+                <p class="text-xs text-slate-500 mt-1">Accepted formats: JPG, PNG, PDF (Required)</p>
+              </div>
+              <div id="reg-stu-doc-selected" class="hidden flex items-center justify-between bg-white p-3 rounded-xl border border-emerald-200 text-left">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div class="w-10 h-10 rounded-lg bg-ptc-light text-ptc-dark flex items-center justify-center shrink-0"><i class="fa-solid fa-file-circle-check text-lg"></i></div>
+                  <div class="truncate">
+                    <p id="reg-stu-doc-name" class="text-sm font-semibold text-slate-800 truncate"></p>
+                    <p id="reg-stu-doc-size" class="text-xs text-ptc-primary font-medium"></p>
+                  </div>
+                </div>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-ptc-light text-ptc-dark shrink-0">Attached</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="reg-stu-error" class="hidden p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation"></i><span id="reg-stu-error-text"></span>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-ptc-primary hover:bg-ptc-hover text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-user-check"></i> Complete Student Registration
+          </button>
+        </form>
+
+        <form id="form-register-services" onsubmit="handleServicesRegister(event)" class="hidden space-y-4" novalidate>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="reg-srv-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Personnel Full Name *</label>
+              <input type="text" id="reg-srv-name" placeholder="e.g., Maria Santos, RGC" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+            </div>
+            <div>
+              <label for="reg-srv-role" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Student Services Role *</label>
+              <select id="reg-srv-role" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm bg-white">
+                <option value="">-- Select Official Role --</option>
+                <option value="Guidance Office Personnel">Guidance Office Personnel</option>
+                <option value="Student Council Personnel">Student Council Personnel</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="reg-srv-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Personnel ID *</label>
+              <input type="text" id="reg-srv-id" placeholder="e.g., GO-1001 or SC-2001" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm uppercase" />
+            </div>
+            <div>
+              <label for="reg-srv-email" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Official Email *</label>
+              <input type="email" id="reg-srv-email" placeholder="personnel@paterostechnologicalcollege.edu.ph" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <label for="reg-srv-password" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Create Password *</label>
+            <input type="password" id="reg-srv-password" placeholder="Minimum 6 characters" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+          </div>
+
+          <div id="reg-srv-error" class="hidden p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation"></i><span id="reg-srv-error-text"></span>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-ptc-dark hover:bg-ptc-hover text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-shield-check"></i> Register Student Services Account
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t border-slate-100 text-center text-sm text-slate-600">
+          Already registered an account?
+          <button type="button" onclick="navigateTo('login')" class="font-bold text-ptc-primary hover:text-ptc-dark underline ml-1">Log In Here</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. LOGIN SCREEN -->
+    <section id="view-login" class="hidden flex-grow flex items-center justify-center px-4 py-10 fade-in">
+      <div class="max-w-lg w-full bg-white rounded-3xl shadow-xl border border-emerald-100 p-6 sm:p-10">
+        <div class="flex items-center justify-between mb-6">
+          <button type="button" onclick="navigateTo('landing')" class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-ptc-dark transition">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-ptc-light text-ptc-dark">Portal Authentication</span>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900 mb-1">Log In to PTC SafeSpace</h2>
+        <p class="text-sm text-slate-600 mb-6">Select your portal role and enter your registered credentials.</p>
+
+        <div class="grid grid-cols-2 gap-2 p-1.5 bg-ptc-bg rounded-2xl border border-emerald-100 mb-6">
+          <button type="button" id="login-tab-student" onclick="switchLoginRole('student')" class="py-2.5 px-4 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 bg-ptc-primary text-white shadow-sm">
+            <i class="fa-solid fa-user-graduate"></i> Student
+          </button>
+          <button type="button" id="login-tab-services" onclick="switchLoginRole('services')" class="py-2.5 px-4 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 text-slate-600 hover:text-ptc-dark">
+            <i class="fa-solid fa-user-shield"></i> Student Services
+          </button>
+        </div>
+
+        <form id="form-login-student" onsubmit="handleStudentLogin(event)" class="space-y-4" novalidate>
+          <div>
+            <label for="login-stu-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Student Full Name *</label>
+            <input type="text" id="login-stu-name" placeholder="Enter your registered full name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+          </div>
+          <div>
+            <label for="login-stu-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Student ID Number *</label>
+            <input type="text" id="login-stu-id" placeholder="e.g., 26BSIT-1234" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm uppercase" />
+          </div>
+          <div>
+            <label for="login-stu-password" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Password *</label>
+            <input type="password" id="login-stu-password" placeholder="Enter your password" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+          </div>
+          <div id="login-stu-error" class="hidden p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-start gap-2">
+            <i class="fa-solid fa-circle-exclamation mt-0.5"></i><span id="login-stu-error-text"></span>
+          </div>
+          <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-ptc-primary hover:bg-ptc-hover text-white font-bold text-sm shadow-md transition cursor-pointer">
+            Access Student Dashboard
+          </button>
+        </form>
+
+        <form id="form-login-services" onsubmit="handleServicesLogin(event)" class="hidden space-y-4" novalidate>
+          <div>
+            <label for="login-srv-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Personnel Full Name *</label>
+            <input type="text" id="login-srv-name" placeholder="Enter registered personnel name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+          </div>
+          <div>
+            <label for="login-srv-role" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Student Services Role *</label>
+            <select id="login-srv-role" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm bg-white">
+              <option value="">-- Select Your Role --</option>
+              <option value="Guidance Office Personnel">Guidance Office Personnel</option>
+              <option value="Student Council Personnel">Student Council Personnel</option>
+            </select>
+          </div>
+          <div>
+            <label for="login-srv-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Personnel ID *</label>
+            <input type="text" id="login-srv-id" placeholder="e.g., GO-1001 or SC-2001" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm uppercase" />
+          </div>
+          <div>
+            <label for="login-srv-password" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Password *</label>
+            <input type="password" id="login-srv-password" placeholder="Enter your password" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-ptc-primary outline-none text-sm" />
+          </div>
+          <div id="login-srv-error" class="hidden p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-start gap-2">
+            <i class="fa-solid fa-circle-exclamation mt-0.5"></i><span id="login-srv-error-text"></span>
+          </div>
+          <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-ptc-dark hover:bg-ptc-hover text-white font-bold text-sm shadow-md transition cursor-pointer">
+            Access Student Services Dashboard
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t border-slate-100 text-center text-sm text-slate-600">
+          Don't have an account yet?
+          <button type="button" onclick="navigateTo('register')" class="font-bold text-ptc-primary hover:text-ptc-dark underline ml-1">Register First</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. STUDENT DASHBOARD -->
+    <section id="view-student-dashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-emerald-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-1.5">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-ptc-light text-ptc-dark">Student Portal</span>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-ptc-primary border border-emerald-200">
+              <i class="fa-solid fa-circle-check mr-1"></i> <span id="stu-dash-doc-badge">Verified</span>
+            </span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Welcome, <span id="stu-dash-name" class="text-ptc-dark">Student</span></h1>
+          <p class="text-sm text-slate-600 mt-0.5">Student ID: <span id="stu-dash-id" class="font-semibold text-slate-800"></span> &bull; <span id="stu-dash-email"></span></p>
+        </div>
+        <button type="button" onclick="switchStudentTab('new-report')" class="px-5 py-3 rounded-xl bg-ptc-primary hover:bg-ptc-hover text-white font-semibold text-sm shadow-sm transition flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-plus"></i> Submit New Report
+        </button>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-6 bg-white p-2 rounded-2xl border border-emerald-100 shadow-sm">
+        <button type="button" id="stu-tab-btn-reports" onclick="switchStudentTab('reports')" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 bg-ptc-dark text-white">
+          <i class="fa-solid fa-folder-open"></i> My Reports
+        </button>
+        <button type="button" id="stu-tab-btn-new-report" onclick="switchStudentTab('new-report')" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 text-slate-600 hover:bg-ptc-bg">
+          <i class="fa-solid fa-file-pen"></i> Report an Incident
+        </button>
+        <button type="button" id="stu-tab-btn-counseling" onclick="switchStudentTab('counseling')" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 text-slate-600 hover:bg-ptc-bg">
+          <i class="fa-solid fa-hand-holding-heart"></i> Counseling & Safety Resources
+        </button>
+        <button type="button" id="stu-tab-btn-notifications" onclick="switchStudentTab('notifications')" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 text-slate-600 hover:bg-ptc-bg relative">
+          <i class="fa-solid fa-bell"></i> Notifications
+          <span id="stu-notif-badge" class="hidden px-2 py-0.5 text-xs font-bold rounded-full bg-red-500 text-white">0</span>
+        </button>
+      </div>
+
+      <div id="stu-panel-reports" class="space-y-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm">
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Reports</div>
+            <div id="stu-stat-total" class="text-3xl font-extrabold text-slate-900 mt-1">0</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm">
+            <div class="text-xs font-semibold uppercase tracking-wider text-amber-600">Pending Review</div>
+            <div id="stu-stat-pending" class="text-3xl font-extrabold text-amber-600 mt-1">0</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm">
+            <div class="text-xs font-semibold uppercase tracking-wider text-blue-600">In Progress / Referred</div>
+            <div id="stu-stat-progress" class="text-3xl font-extrabold text-blue-600 mt-1">0</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm">
+            <div class="text-xs font-semibold uppercase tracking-wider text-ptc-primary">Resolved</div>
+            <div id="stu-stat-resolved" class="text-3xl font-extrabold text-ptc-primary mt-1">0</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-emerald-100 shadow-sm p-6">
+          <h3 class="text-lg font-bold text-slate-900 mb-4">Submitted Incident Reports</h3>
+          <div id="stu-reports-list" class="space-y-4"></div>
+        </div>
+      </div>
+
+      <div id="stu-panel-new-report" class="hidden bg-white rounded-3xl border border-emerald-100 shadow-sm p-6 sm:p-8 max-w-3xl mx-auto">
+        <h3 class="text-2xl font-bold text-slate-900 mb-4">Submit an Incident Report</h3>
+        <form id="form-new-incident" onsubmit="handleIncidentSubmit(event)" class="space-y-5">
+          <!-- ANONYMOUS REPORT OPTION -->
+          <div class="p-4 rounded-2xl bg-ptc-bg border border-emerald-200 flex items-start gap-3">
+            <input type="checkbox" id="inc-anonymous" class="mt-1 w-4 h-4 accent-ptc-primary rounded cursor-pointer" />
+            <label for="inc-anonymous" class="text-sm cursor-pointer">
+              <span class="font-bold text-ptc-dark block">Submit this report anonymously</span>
+              <span class="text-xs text-slate-600">Your name, Student ID, and verification document will be hidden from Student Services personnel. You will still be able to track status updates in your "My Reports" tab.</span>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="inc-category" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Incident Category *</label>
+              <select id="inc-category" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm bg-white">
+                <option value="">-- Select Category --</option>
+                <option value="Bullying / Harassment">Physical Bullying</option>
+                <option value="Mental Health / Peer Concern">Sexual Harassment</option>
+                <option value="Campus Safety Hazard">Death Threat</option>
+                <option value="Academic Misconduct">Cyber Bullying</option>
+                <option value="Facility / Security Issue">Social/Relational Bullying</option>
+                <option value="Other Concern">Other Concern</option>
+              </select>
+            </div>
+            <div>
+              <label for="inc-datetime" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Date & Time *</label>
+              <input type="datetime-local" id="inc-datetime" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm" />
+            </div>
+          </div>
+          <div>
+            <label for="inc-location" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Location / Platform *</label>
+            <input type="text" id="inc-location" placeholder="e.g., Main Building 3rd Floor" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm" />
+          </div>
+          <div>
+            <label for="inc-description" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Detailed Description *</label>
+            <textarea id="inc-description" rows="4" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Supporting Evidence (Optional)</label>
+            <div class="upload-zone border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center bg-slate-50 relative">
+              <input type="file" id="inc-evidence" accept="image/*,.pdf,.doc,.docx" onchange="handleEvidenceSelect(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <div id="inc-evidence-label" class="text-sm text-slate-600"><i class="fa-solid fa-paperclip text-ptc-primary mr-1.5"></i> Click to attach screenshot, photo, or document</div>
+            </div>
+          </div>
+          <div class="flex justify-end gap-3">
+            <button type="button" onclick="switchStudentTab('reports')" class="px-5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold">Cancel</button>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-ptc-primary text-white text-sm font-bold">Submit Incident Report</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="stu-panel-counseling" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-3xl border border-emerald-100 shadow-sm p-6 sm:p-8">
+          <h3 class="text-xl font-bold text-slate-900 mb-4">Request a Counseling Consultation</h3>
+          <form id="form-consultation" onsubmit="handleConsultationSubmit(event)" class="space-y-4">
+            <div>
+              <label for="cons-topic" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Topic *</label>
+              <select id="cons-topic" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm bg-white">
+                <option value="">-- Select Topic --</option>
+                <option value="Incident Follow-up & Support">Incident Follow-up & Support</option>
+                <option value="Stress, Anxiety & Mental Wellness">Stress, Anxiety & Mental Wellness</option>
+                <option value="Peer / Interpersonal Conflict">Peer / Interpersonal Conflict</option>
+                <option value="Academic & Personal Guidance">Academic & Personal Guidance</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="cons-date" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Preferred Date *</label>
+                <input type="date" id="cons-date" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm" />
+              </div>
+              <div>
+                <label for="cons-mode" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Mode *</label>
+                <select id="cons-mode" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm bg-white">
+                  <option value="In-Person (Guidance Office)">In-Person (Guidance Office)</option>
+                  <option value="Online Video / Audio Call">Online Video / Audio Call</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label for="cons-notes" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">Notes</label>
+              <textarea id="cons-notes" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+            </div>
+            <button type="submit" class="w-full py-3 rounded-xl bg-ptc-primary text-white font-bold text-sm">Submit Consultation Request</button>
+          </form>
+          <div class="mt-6 pt-6 border-t border-slate-100">
+            <h4 class="text-sm font-bold text-slate-800 mb-3">My Consultation Requests</h4>
+            <div id="stu-consultations-list" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 space-y-6">
+          <div class="bg-gradient-to-br from-ptc-dark to-ptc-primary text-white rounded-3xl p-6 sm:p-8 shadow-md">
+            <h3 class="text-xl font-bold mb-4">Campus Safety & Emergency Contacts</h3>
+            <div class="space-y-3 text-sm">
+              <div class="p-3.5 rounded-2xl bg-white/10 flex justify-between"><span>PTC Guidance Office</span><strong>Local 104</strong></div>
+              <div class="p-3.5 rounded-2xl bg-white/10 flex justify-between"><span>PTC Campus Security (24/7)</span><strong>(02) 8642-5100</strong></div>
+              <div class="p-3.5 rounded-2xl bg-white/10 flex justify-between"><span>NCMH Crisis Hotline</span><strong>1553</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="stu-panel-notifications" class="hidden max-w-3xl mx-auto bg-white rounded-3xl border border-emerald-100 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-slate-900">Notifications & Case Updates</h3>
+          <button type="button" onclick="markAllStudentNotificationsRead()" class="text-xs font-semibold text-ptc-primary hover:underline">Mark all as read</button>
+        </div>
+        <div id="stu-notifications-list" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- 5. STUDENT SERVICES DASHBOARD -->
+    <section id="view-services-dashboard" class="hidden flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-emerald-100 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-1.5">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-ptc-dark text-white">Student Services Portal</span>
+            <span id="srv-dash-role-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-ptc-light text-ptc-dark"></span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Welcome, <span id="srv-dash-name" class="text-ptc-dark"></span></h1>
+          <p class="text-sm text-slate-600 mt-0.5">Personnel ID: <span id="srv-dash-id" class="font-semibold text-slate-800"></span> &bull; <span id="srv-dash-email"></span></p>
+        </div>
+        <select id="srv-filter-status" onchange="renderServicesDashboard()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-medium bg-white">
+          <option value="ALL">All Reports</option>
+          <option value="Pending Review">Pending Review</option>
+          <option value="Under Investigation">Under Investigation</option>
+          <option value="Referred to Guidance">Referred to Guidance</option>
+          <option value="More Info Requested">More Info Requested</option>
+          <option value="Resolved">Resolved</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm"><div class="text-xs font-semibold uppercase text-slate-500">Total Reports</div><div id="srv-stat-total" class="text-3xl font-extrabold mt-1">0</div></div>
+        <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm"><div class="text-xs font-semibold uppercase text-amber-600">Needs Review</div><div id="srv-stat-pending" class="text-3xl font-extrabold text-amber-600 mt-1">0</div></div>
+        <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm"><div class="text-xs font-semibold uppercase text-blue-600">Active / Referred</div><div id="srv-stat-active" class="text-3xl font-extrabold text-blue-600 mt-1">0</div></div>
+        <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm"><div class="text-xs font-semibold uppercase text-ptc-primary">Resolved Cases</div><div id="srv-stat-resolved" class="text-3xl font-extrabold text-ptc-primary mt-1">0</div></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-8 bg-white rounded-3xl border border-emerald-100 shadow-sm p-6">
+          <h3 class="text-lg font-bold text-slate-900 mb-4">Student Incident Reports</h3>
+          <div id="srv-reports-list" class="space-y-4"></div>
+        </div>
+        <div class="lg:col-span-4 bg-white rounded-3xl border border-emerald-100 shadow-sm p-6 h-fit">
+          <h3 class="text-lg font-bold text-slate-900 mb-4">Counseling Requests</h3>
+          <div id="srv-consultations-list" class="space-y-3"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white border-t border-emerald-100 py-5 px-4 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <div>&copy; 2026 <strong>PTC SafeSpace Portal</strong> &mdash; Pateros Technological College.</div>
+      <div>Confidential Student Safety & Guidance Management Portal</div>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+  <div id="modal-student-update" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-emerald-100">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Report Details & Update</h3>
+        <button type="button" onclick="closeModal('modal-student-update')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modal-stu-report-details" class="space-y-3 text-sm mb-5"></div>
+      <form onsubmit="handleStudentAppendInfo(event)" class="space-y-3 pt-4 border-t border-slate-100">
+        <input type="hidden" id="stu-update-report-id" />
+        <textarea id="stu-additional-info" rows="3" placeholder="Add additional details..." required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-student-update')" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold">Close</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-ptc-primary text-white text-xs font-bold">Save Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-services-review" class="hidden fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-emerald-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold text-slate-900">Review Incident Report</h3>
+        <button type="button" onclick="closeModal('modal-services-review')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modal-srv-report-details" class="space-y-3 text-sm mb-6"></div>
+      <form onsubmit="handleServicesCaseSave(event)" class="space-y-4 pt-4 border-t border-slate-200">
+        <input type="hidden" id="srv-review-report-id" />
+        <div>
+          <label for="srv-review-status" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Update Case Status</label>
+          <select id="srv-review-status" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm bg-white">
+            <option value="Pending Review">Pending Review</option>
+            <option value="Under Investigation">Under Investigation</option>
+            <option value="Referred to Guidance">Referred to Guidance</option>
+            <option value="More Info Requested">More Info Requested (Notify Student)</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+        <div>
+          <label for="srv-review-notes" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Counselor / Admin Notes</label>
+          <textarea id="srv-review-notes" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-services-review')" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-ptc-dark text-white text-xs font-bold">Save & Notify Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

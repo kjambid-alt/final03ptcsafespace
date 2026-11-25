@@ -1,0 +1,43 @@
+/* PTC SafeSpace Portal - Custom Stylesheet */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f9f6;
+  color: #1e293b;
+}
+
+.fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ptc-pattern {
+  background-color: #f4f9f6;
+  background-image: radial-gradient(#19875418 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.upload-zone:hover {
+  border-color: #198754;
+  background-color: #d1e7dd40;
+}
+.ptc-pattern {
+  /* Adds a light green/white tint over the image so dark text stays readable */
+  background-image: 
+    linear-gradient(rgba(244, 249, 246, 0.85), rgba(244, 249, 246, 0.90)),
+    url('images/landingpagepic.png');
+  
+  background-size: cover;        /* Scales the image to cover the entire screen */
+  background-position: center;   /* Keeps the center of the image focused */
+  background-repeat: no-repeat;  /* Prevents the image from tiling */
+  background-attachment: fixed;  /* Keeps the background still when scrolling */
+}
