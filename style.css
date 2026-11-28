@@ -1,4 +1,3 @@
-/* PTC SafeSpace Portal - Custom Stylesheet */
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f4f9f6;
@@ -31,7 +30,6 @@ body {
   background-color: #d1e7dd40;
 }
 .ptc-pattern {
-  /* Adds a light green/white tint over the image so dark text stays readable */
   background-image: 
     linear-gradient(rgba(244, 249, 246, 0.85), rgba(244, 249, 246, 0.90)),
     url('images/landingpagepic.png');
