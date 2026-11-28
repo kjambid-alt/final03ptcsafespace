@@ -1,6 +1,3 @@
-/**
- * PTC SafeSpace Portal - Client-Side Application & Persistent LocalStorage Engine
- */
 const STORAGE_KEYS = {
   USERS: 'ptc_safespace_users_v1',
   SESSION: 'ptc_safespace_session_v1',
